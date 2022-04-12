@@ -24,15 +24,18 @@ describe('Play', () => {
 
   test('check if the game is over', () => {
     const scoreTable = {
-      [ShipType.Battleship]: { count: 0, positions: [] },
-      [ShipType.Carrier]: { count: 0, positions: [] },
-      [ShipType.Cruiser]: { count: 0, positions: [] },
-      [ShipType.Destroyer]: { count: 0, positions: [] },
-      [ShipType.Submarine]: { count: 0, positions: [] },
+      [ShipType.Battleship]: { count: 0, positions: [], size: 0 },
+      [ShipType.Carrier]: { count: 0, positions: [], size: 0 },
+      [ShipType.Cruiser]: { count: 0, positions: [], size: 0 },
+      [ShipType.Destroyer]: { count: 0, positions: [], size: 0 },
+      [ShipType.Submarine]: { count: 0, positions: [], size: 0 },
     };
     expect(isGameOver(scoreTable)).toBe(true);
 
-    scoreTable[ShipType.Battleship] = { count: 1, positions: [] };
+    scoreTable[ShipType.Battleship] = { count: 1, positions: [], size: 1 };
+    expect(isGameOver(scoreTable)).toBe(true);
+
+    scoreTable[ShipType.Battleship] = { count: 0, positions: [], size: 1 };
     expect(isGameOver(scoreTable)).toBe(false);
   });
 });

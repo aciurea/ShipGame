@@ -1,9 +1,6 @@
+import { isGameOver } from '../../providers/play';
 import { ShipType } from '../../types/play';
-
-type TableGameProps = {
-  board: Array<Array<null | string>>;
-  updateScore: (shipType: ShipType) => void;
-};
+import { useGame, useGameDispatch } from './game-context';
 
 const getValue = (data: string): { col: string; dirty: boolean } => {
   if (!data) return { col: '', dirty: true };
@@ -11,7 +8,12 @@ const getValue = (data: string): { col: string; dirty: boolean } => {
   return JSON.parse(data);
 };
 
-export const TableGame = ({ board, updateScore }: TableGameProps) => {
+const TableGame = () => {
+  const dispatch = useGameDispatch();
+  const { table, score } = useGame();
+
+  if (!score) return null;
+
   return (
     <section
       className="board"
@@ -19,14 +21,28 @@ export const TableGame = ({ board, updateScore }: TableGameProps) => {
         const { col, dirty } = getValue(target.dataset?.col);
 
         if (dirty || col === '') return;
-        if (col !== null) updateScore(col as ShipType);
+        if (col !== null) {
+          const ship = score[col as ShipType];
+          const newShip = {
+            ...ship,
+            count: ship.count + 1,
+          };
+
+          const newScore = {
+            ...score,
+            [col]: newShip,
+          };
+          if (isGameOver(newScore)) dispatch({ type: 'setIsOver', isOver: true });
+          dispatch({ type: 'setScore', score: newScore });
+        }
 
         target.dataset.col = JSON.stringify({ col, dirty: true });
         target.children[0].style.visibility = 'visible';
       }}
     >
-      {board?.map((row, index) => {
-        const key = JSON.stringify(row) + index;
+      {table?.map((row, index) => {
+        const key = `${JSON.stringify(row)}_${index}`;
+
         return (
           <section className="row" key={key}>
             {row.map((col, index) => (
@@ -48,3 +64,5 @@ export const TableGame = ({ board, updateScore }: TableGameProps) => {
     </section>
   );
 };
+
+export default TableGame;

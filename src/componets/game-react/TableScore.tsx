@@ -1,8 +1,5 @@
 import { ShipType } from '../../types/play';
-
-type TableScoreProps = {
-  scoreTable: Record<ShipType, { count: number; positions: [number, number][] }>;
-};
+import { useGame } from './game-context';
 
 const base = '/assets/';
 const Images = {
@@ -13,25 +10,28 @@ const Images = {
   [ShipType.Submarine]: `${base}submarineShape.png`,
 };
 
-export const TableScore = ({ scoreTable }: TableScoreProps) => {
+const TableScore = () => {
+  const { score } = useGame();
+  if (!score) return null;
+
   return (
     <section className="table">
-      {Object.keys(scoreTable).map((shipType: any) => {
-        const { count, positions } = scoreTable[shipType as ShipType];
+      {Object.keys(score).map((shipType: any) => {
+        const { count, size } = score[shipType as ShipType];
 
         return (
           <section key={shipType} style={{ padding: '5px 0' }}>
             <img
               src={Images[shipType as ShipType]}
-              alt="something"
+              alt="a ship"
               style={{
                 maxWidth: '40%',
                 height: 'auto',
                 paddingRight: 10,
-                opacity: count === positions.length ? 0.5 : 1,
+                opacity: count === size ? 0.5 : 1,
               }}
             />
-            {getScore(count)}
+            {getScore(count, size)}
           </section>
         );
       })}
@@ -39,14 +39,18 @@ export const TableScore = ({ scoreTable }: TableScoreProps) => {
   );
 };
 
-export const getScore = (count: number) => {
-  return (
-    <>
-      {new Array(count).fill(null).map((_, index) => (
-        <span key={index}>
-          <img src="/assets/HitSmall.png" alt="hit" width="25px" height="25px" />
-        </span>
-      ))}
-    </>
-  );
+const getScore = (count: number, size: number) => {
+  const score = [];
+  while (count > 0) {
+    score.push(
+      <span key={count}>
+        <img src="/assets/HitSmall.png" alt="hit" width="25px" height="25px" />
+      </span>
+    );
+    count--;
+  }
+
+  return score;
 };
+
+export default TableScore;

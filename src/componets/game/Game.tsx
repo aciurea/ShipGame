@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { isGameOver, populateTable } from '../../services/play';
+import { isGameOver, populateTable } from '../../providers/play';
 import { ShipType } from '../../types/play';
 import { Container } from './styled';
 import { TableGame } from './TableGame';
@@ -14,7 +14,7 @@ export const GameComponent = () => {
       const currentShip = scoreTable[shipType];
       const newShip = {
         ...currentShip,
-        count: currentShip.count === 0 ? 0 : currentShip.count - 1,
+        count: currentShip.count + 1,
       };
 
       const newScoreTable = {

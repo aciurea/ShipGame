@@ -6,3 +6,9 @@ export enum ShipType {
   Destroyer = 'Destroyer',
 }
 export type Table = Array<Array<string | null>>;
+
+export interface ScoreTable {
+  count: number;
+  size: number;
+  positions: Array<[number, number]>;
+}

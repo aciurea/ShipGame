@@ -1,7 +1,7 @@
-import { ShipType, Table } from '../types/play';
+import { ScoreTable, ShipType, Table } from '../types/play';
 import { initRandomApi } from './tests/random';
 
-export const generateArray = (size: number): Array<Array<null>> => {
+export const generateArray = (size: number): Array<Array<null | string>> => {
   const newArr = [];
   for (let i = 0; i < size; i++) {
     newArr.push(new Array(size).fill(null));
@@ -32,11 +32,6 @@ export const addShip = (
   return positions;
 };
 
-type ScoreTale = {
-  count: number;
-  positions: Array<[number, number]>;
-};
-
 export const populateTable = (size: number) => {
   const board = generateArray(size);
   const generateRandomNumber = initRandomApi(board.length);
@@ -47,17 +42,21 @@ export const populateTable = (size: number) => {
   const carrier = addShip(5, ShipType.Carrier, board, generateRandomNumber);
   const cruiser = addShip(2, ShipType.Cruiser, board, generateRandomNumber);
 
-  const scoreTable: Record<ShipType, ScoreTale> = {
-    [ShipType.Battleship]: { count: battleship.length, positions: battleship },
-    [ShipType.Carrier]: { count: carrier.length, positions: carrier },
-    [ShipType.Cruiser]: { count: cruiser.length, positions: cruiser },
-    [ShipType.Destroyer]: { count: destroyer.length, positions: destroyer },
-    [ShipType.Submarine]: { count: submarine.length, positions: submarine },
+  const scoreTable: Record<ShipType, ScoreTable> = {
+    [ShipType.Battleship]: { size: battleship.length, positions: battleship, count: 0 },
+    [ShipType.Carrier]: { size: carrier.length, positions: carrier, count: 0 },
+    [ShipType.Cruiser]: { size: cruiser.length, positions: cruiser, count: 0 },
+    [ShipType.Destroyer]: { size: destroyer.length, positions: destroyer, count: 0 },
+    [ShipType.Submarine]: { size: submarine.length, positions: submarine, count: 0 },
   };
 
   return { board, scoreTable };
 };
 
-export const isGameOver = (scoreTable: Record<ShipType, ScoreTale>): boolean => {
-  return !Object.keys(scoreTable).some((key) => scoreTable[key as ShipType].count > 0);
+export const isGameOver = (scoreTable: Record<ShipType, ScoreTable>): boolean => {
+  return Object.keys(scoreTable).every((key) => {
+    const { size, count } = scoreTable[key as ShipType];
+
+    return size === count;
+  });
 };
