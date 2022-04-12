@@ -10,8 +10,8 @@ const Container = styled.section`
 function App() {
   return (
     <Container>
-      <GameComponent />
-      {/* <GameReact /> */}
+      {/* <GameComponent /> */}
+      <GameReact />
     </Container>
   );
 }
