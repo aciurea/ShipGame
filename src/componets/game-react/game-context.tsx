@@ -1,11 +1,11 @@
 import createStore from '../../providers/create-store';
 import { ScoreTable, ShipType } from '../../types/play';
 
-type State = {
+interface State {
   score: Record<ShipType, ScoreTable> | null;
   table: Array<Array<null | string>>;
   isOver: boolean;
-};
+}
 
 type Action =
   | { type: 'setScore'; score: Record<ShipType, ScoreTable> }
