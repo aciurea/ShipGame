@@ -13,6 +13,18 @@ const Container = styled.section`
   padding: 20px;
   overflow: auto;
 
+  .popup {
+    opacity: 0.5;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .header {
     display: flex;
   }
@@ -63,6 +75,11 @@ const Container = styled.section`
   .table {
     display: flex;
     flex-direction: column;
+
+    label {
+      font-weight: 700;
+      font-size: 20px;
+    }
   }
 `;
 

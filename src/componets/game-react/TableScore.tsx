@@ -16,7 +16,7 @@ const TableScore = ({ player }: { player: Player }) => {
 
   return (
     <section className="table">
-      <section style={{ padding: 20 }}>{player.name}</section>
+      <label style={{ padding: 20 }}>{player.name}</label>
 
       {Object.keys(player.records).map((shipType: any) => {
         const { count, size } = score[shipType as ShipType];

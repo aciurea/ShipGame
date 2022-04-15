@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { populateTable } from '../../providers/play';
 import { Player, ShipType } from '../../types/play';
-import { useGameDispatch } from './game-context';
+import { playerRecords, useGameDispatch } from './game-context';
 
 const Container = styled.section`
   display: flex;
@@ -21,14 +22,6 @@ interface Elements {
   player1: HTMLInputElement;
   player2: HTMLInputElement;
 }
-
-const playerRecords = Object.freeze({
-  [ShipType.Battleship]: 0,
-  [ShipType.Carrier]: 0,
-  [ShipType.Cruiser]: 0,
-  [ShipType.Destroyer]: 0,
-  [ShipType.Submarine]: 0,
-});
 
 export const GameConfiguration = () => {
   const [isComputer, setIsComputer] = React.useState(false);
@@ -64,7 +57,13 @@ export const GameConfiguration = () => {
           dispatch({
             type: 'setConfig',
             config: { isComputer, players: [p1, p2] },
-            isNew: true,
+          });
+
+          const { board, scoreTable } = populateTable(10);
+
+          dispatch({
+            type: 'populateTable',
+            table: { table: board, score: scoreTable },
           });
           event.preventDefault();
         }}

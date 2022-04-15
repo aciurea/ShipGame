@@ -11,7 +11,6 @@ interface State {
   isOver: boolean;
   turn: 0 | 1;
   config: null | Configuration;
-  isNew: boolean;
 }
 
 type Action =
@@ -23,7 +22,15 @@ type Action =
   | { type: 'populateTable'; table: Pick<State, 'table' | 'score'> }
   | { type: 'setIsOver'; isOver: boolean }
   | { type: 'setTurn'; turn: 0 | 1 }
-  | { type: 'setConfig'; config: Configuration | null; isNew: boolean };
+  | { type: 'setConfig'; config: Configuration | null };
+
+export const playerRecords = Object.freeze({
+  [ShipType.Battleship]: 0,
+  [ShipType.Carrier]: 0,
+  [ShipType.Cruiser]: 0,
+  [ShipType.Destroyer]: 0,
+  [ShipType.Submarine]: 0,
+});
 
 const initialState: State = {
   score: null,
@@ -31,7 +38,6 @@ const initialState: State = {
   table: [],
   turn: 0,
   config: null,
-  isNew: false,
 };
 
 function reducer(state: any, action: Action): State {
@@ -59,7 +65,7 @@ function reducer(state: any, action: Action): State {
       return { ...state, ...action.table };
 
     case 'setConfig':
-      return { ...initialState, config: action.config, isNew: action.isNew };
+      return { ...initialState, config: action.config };
 
     default:
       throw new Error('Action no implemented');
