@@ -12,3 +12,8 @@ export interface ScoreTable {
   size: number;
   positions: Array<[number, number]>;
 }
+
+export type Player = {
+  name: string;
+  records: Record<ShipType, number>;
+};

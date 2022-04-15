@@ -1,4 +1,4 @@
-import { ScoreTable, ShipType, Table } from '../types/play';
+import { Player, ScoreTable, ShipType, Table } from '../types/play';
 import { initRandomApi } from './tests/random';
 
 export const generateArray = (size: number): Array<Array<null | string>> => {
@@ -59,4 +59,14 @@ export const isGameOver = (scoreTable: Record<ShipType, ScoreTable>): boolean =>
 
     return size === count;
   });
+};
+
+export const add = (player: Player, col: ShipType): Player => {
+  return {
+    name: player.name,
+    records: {
+      ...player.records,
+      [col as ShipType]: player.records[col as ShipType] + 1,
+    },
+  };
 };

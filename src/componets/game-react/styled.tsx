@@ -22,13 +22,14 @@ const Container = styled.section`
     display: grid;
     width: 100%;
 
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
       grid-template-columns: 1fr;
       row-gap: 20px;
     }
 
-    @media (min-width: 901px) {
-      grid-template-columns: minmax(300px, 20%) minmax(500px, 30%);
+    @media (min-width: 1101px) {
+      grid-template-columns: minmax(300px, 20%) minmax(500px, 30%) minmax(300px, 20%);
+      column-gap: 20px;
       grid-template-rows: minmax(500px 30%);
     }
 
@@ -57,6 +58,11 @@ const Container = styled.section`
         align-items: center;
       }
     }
+  }
+
+  .table {
+    display: flex;
+    flex-direction: column;
   }
 `;
 
