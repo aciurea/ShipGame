@@ -1,3 +1,4 @@
+import { getCount } from '../../providers/play';
 import { Player, ShipType } from '../../types/play';
 import { useGame } from './game-context';
 
@@ -16,7 +17,9 @@ const TableScore = ({ player }: { player: Player }) => {
 
   return (
     <section className="table">
-      <label style={{ padding: 20 }}>{player.name}</label>
+      <label style={{ padding: 20 }}>
+        {player.name}: {getCount(player.records)}
+      </label>
 
       {Object.keys(player.records).map((shipType: any) => {
         const { count, size } = score[shipType as ShipType];

@@ -71,12 +71,12 @@ export const add = (player: Player, col: ShipType): Player => {
   };
 };
 
-const getCount = (records: Record<ShipType, number>): number =>
+export const getCount = (records: Record<ShipType, number>): number =>
   Object.keys(records).reduce((acc, record) => (acc += records[record as ShipType]), 0);
 
 export const getWinner = (player1: Player, player2: Player): string => {
   const p1Count = getCount(player1.records);
   const p2Count = getCount(player2.records);
 
-  return p1Count > p2Count ? player1.name : player2.name;
+  return p1Count === p2Count ? 'No one ' : p1Count > p2Count ? player2.name : player1.name;
 };
