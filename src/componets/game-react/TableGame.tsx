@@ -20,9 +20,10 @@ const TableGame = () => {
       onClick={({ target }: any) => {
         if (isOver) return;
         const { col, dirty } = getValue(target.dataset?.col);
-        dispatch({ type: 'setTurn', turn: turn === 0 ? 1 : 0 });
 
+        if (!dirty) dispatch({ type: 'setTurn', turn: turn === 0 ? 1 : 0 });
         if (dirty || col === '') return;
+
         if (col !== null) {
           const ship = score[col as ShipType];
           const newShip = {
@@ -37,8 +38,9 @@ const TableGame = () => {
           if (isGameOver(newScore)) dispatch({ type: 'setIsOver', isOver: true });
           const [player1, player2] = config.players;
 
-          const newPlayer1 = turn === 0 ? add(player1, col as ShipType) : { ...player1 };
-          const newPlayer2 = turn === 1 ? add(player2, col as ShipType) : { ...player2 };
+          // destroy the ship of the other player
+          const newPlayer1 = turn === 0 ? { ...player1 } : add(player1, col as ShipType);
+          const newPlayer2 = turn === 1 ? { ...player2 } : add(player2, col as ShipType);
 
           dispatch({
             type: 'setScore',

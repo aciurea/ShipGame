@@ -14,7 +14,6 @@ const Container = styled.section`
   overflow: auto;
 
   .popup {
-    opacity: 0.5;
     position: fixed;
     width: 100%;
     height: 100%;
