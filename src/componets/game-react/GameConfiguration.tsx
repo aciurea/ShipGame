@@ -107,7 +107,11 @@ export const GameConfiguration = () => {
           min={5}
           onChange={(value) => {
             const maxShips = getMaxShips(+value);
-            setMax({ max: maxShips, remaining: maxShips });
+
+            setMax({
+              max: maxShips,
+              remaining: maxShips - (max.max - max.remaining),
+            });
           }}
         />
 
