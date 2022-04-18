@@ -128,7 +128,7 @@ export const getNewScore = ({ score, col, config, turn }: NewScoreProps) => {
 export const getMaxShips = (value: number): number => {
   const maxValue = value * value;
 
-  return Math.floor(maxValue - maxValue * 0.4);
+  return Math.floor(maxValue * 0.6);
 };
 
 export const getAllMax = (max: number, elements: any): number => {
