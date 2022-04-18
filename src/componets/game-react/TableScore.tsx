@@ -18,7 +18,7 @@ const TableScore = ({ player }: { player: Player }) => {
   return (
     <section className="table">
       <label style={{ padding: 20 }}>
-        {player.name}: {getCount(player.records)}
+        {player.name}'s lost armada: {getCount(player.records)}
       </label>
 
       {Object.keys(player.records).map((shipType: any) => {

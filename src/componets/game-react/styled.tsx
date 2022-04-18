@@ -33,12 +33,12 @@ const Container = styled.section`
     display: grid;
     width: 100%;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1150px) {
       grid-template-columns: 1fr;
       row-gap: 20px;
     }
 
-    @media (min-width: 1101px) {
+    @media (min-width: 1151px) {
       grid-template-columns: minmax(300px, 20%) minmax(500px, 30%) minmax(300px, 20%);
       column-gap: 20px;
       grid-template-rows: minmax(500px 30%);
