@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import GameReact from './componets/game-react/Game';
-import { GameComponent } from './componets/game/Game';
 
 const Container = styled.section`
   width: 100%;
@@ -10,7 +9,6 @@ const Container = styled.section`
 function App() {
   return (
     <Container>
-      {/* <GameComponent /> */}
       <GameReact />
     </Container>
   );
