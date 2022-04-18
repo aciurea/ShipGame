@@ -1,5 +1,5 @@
 import { NewScoreProps, Player, ScoreTable, ShipType, Table } from '../types/play';
-import { getRandomNum, initRandomApi } from './tests/random';
+import { getRandomNum, initRandomApi } from './random';
 
 export const generateArray = (size: number): Array<Array<null | string>> => {
   const newArr = [];
@@ -32,15 +32,16 @@ export const addShip = (
   return positions;
 };
 
-export const populateTable = (size: number) => {
+type TableProps = { size: number } & Record<ShipType, string | number>;
+export const populateTable = ({ size, ...rest }: TableProps) => {
   const board = generateArray(size);
   const generateRandomNumber = initRandomApi(board.length);
 
-  const battleship = addShip(5, ShipType.Battleship, board, generateRandomNumber);
-  const destroyer = addShip(5, ShipType.Destroyer, board, generateRandomNumber);
-  const submarine = addShip(10, ShipType.Submarine, board, generateRandomNumber);
-  const carrier = addShip(5, ShipType.Carrier, board, generateRandomNumber);
-  const cruiser = addShip(2, ShipType.Cruiser, board, generateRandomNumber);
+  const battleship = addShip(+rest.Battleship, ShipType.Battleship, board, generateRandomNumber);
+  const destroyer = addShip(+rest.Destroyer, ShipType.Destroyer, board, generateRandomNumber);
+  const submarine = addShip(+rest.Submarine, ShipType.Submarine, board, generateRandomNumber);
+  const carrier = addShip(+rest.Carrier, ShipType.Carrier, board, generateRandomNumber);
+  const cruiser = addShip(+rest.Cruiser, ShipType.Cruiser, board, generateRandomNumber);
 
   const scoreTable: Record<ShipType, ScoreTable> = {
     [ShipType.Battleship]: { size: battleship.length, positions: battleship, count: 0 },
@@ -122,4 +123,28 @@ export const getNewScore = ({ score, col, config, turn }: NewScoreProps) => {
   const players: [Player, Player] = [newPlayer1, newPlayer2];
 
   return { score: newScore, players };
+};
+
+export const getMaxShips = (value: number): number => {
+  const maxValue = value * value;
+
+  return Math.floor(maxValue - maxValue * 0.4);
+};
+
+export const getAllMax = (max: number, elements: any): number => {
+  const {
+    Battleship: { value: battleshipValue },
+    Carrier: { value: carrierValue },
+    Destroyer: { value: destroyerValue },
+    Cruiser: { value: cruiserValue },
+    Submarine: { value: submarineValue },
+  } = elements ?? {
+    BattleShip: { value: 0 },
+    Carrier: { value: 0 },
+    Destroyer: { value: 0 },
+    Cruiser: { value: 0 },
+    Submarine: { value: 0 },
+  };
+
+  return max - battleshipValue - carrierValue - destroyerValue - cruiserValue - submarineValue;
 };

@@ -15,11 +15,12 @@ export const Popup = () => {
 
       <button
         onClick={() => {
-          const { board, scoreTable } = populateTable(10);
+          const { board, scoreTable } = populateTable({ size: config.tableSize, ...config.ships });
+
           dispatch({
             type: 'setConfig',
             config: {
-              isComputer: config.isComputer,
+              ...config,
               players: [
                 {
                   ...config.players[0],

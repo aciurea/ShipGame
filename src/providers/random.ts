@@ -1,4 +1,4 @@
-import { Table } from '../../types/play';
+import { Table } from '../types/play';
 
 export const initRandomApi = (length: number) => {
   let pos: Record<string, number> = {};
