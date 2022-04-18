@@ -1,10 +1,7 @@
 import createStore from '../../providers/create-store';
-import { Player, ScoreTable, ShipType } from '../../types/play';
+import { isGameOver } from '../../providers/play';
+import { Configuration, Player, ScoreTable, ShipType } from '../../types/play';
 
-export type Configuration = {
-  isComputer: boolean;
-  players: [Player, Player];
-};
 interface State {
   score: Record<ShipType, ScoreTable> | null;
   table: Array<Array<null | string>>;
@@ -20,7 +17,6 @@ type Action =
       players: [Player, Player];
     }
   | { type: 'populateTable'; table: Pick<State, 'table' | 'score'> }
-  | { type: 'setIsOver'; isOver: boolean }
   | { type: 'setTurn'; turn: 0 | 1 }
   | { type: 'setConfig'; config: Configuration | null };
 
@@ -42,16 +38,11 @@ const initialState: State = {
 
 function reducer(state: any, action: Action): State {
   switch (action.type) {
-    case 'setIsOver':
-      return {
-        ...state,
-        isOver: action.isOver,
-      };
-
     case 'setScore':
       return {
         ...state,
         score: action.score,
+        isOver: isGameOver(action.score),
         config: {
           ...state.config,
           players: action.players,

@@ -1,68 +1,61 @@
-import { add, isGameOver } from '../../providers/play';
-import { ShipType } from '../../types/play';
+import * as React from 'react';
+import { chooseValueByComputer, getAllIndexes, getNewScore, getValue } from '../../providers/play';
 import { useGame, useGameDispatch } from './game-context';
-
-const getValue = (data: string): { col: string; dirty: boolean } => {
-  if (!data) return { col: '', dirty: true };
-
-  return JSON.parse(data);
-};
+import { Overlay } from './Overlay';
 
 const TableGame = () => {
   const dispatch = useGameDispatch();
   const { table, score, turn, config, isOver } = useGame();
+  const { current: computerOptions } = React.useRef(getAllIndexes(table));
+  const tableRef = React.useRef<HTMLElement | null>(null);
+  const [showOverflay, setShowOverlay] = React.useState(false);
 
   if (!score || !config) return null;
 
   return (
     <section
+      ref={tableRef}
       className="board"
+      style={{ position: 'relative' }}
       onClick={({ target }: any) => {
         if (isOver) return;
-        const { col, dirty } = getValue(target.dataset?.col);
+        const { col, dirty, index } = getValue(target.dataset?.col);
 
         if (!dirty) dispatch({ type: 'setTurn', turn: turn === 0 ? 1 : 0 });
         if (dirty || col === '') return;
 
+        if (config.isComputer && turn === 0) {
+          setShowOverlay(true);
+          const timeoutId = setTimeout(() => {
+            if (tableRef.current) chooseValueByComputer(tableRef.current, computerOptions);
+            setShowOverlay(false);
+            clearTimeout(timeoutId);
+          }, 2000);
+        }
+
         if (col !== null) {
-          const ship = score[col as ShipType];
-          const newShip = {
-            ...ship,
-            count: ship.count + 1,
-          };
-
-          const newScore = {
-            ...score,
-            [col]: newShip,
-          };
-          if (isGameOver(newScore)) dispatch({ type: 'setIsOver', isOver: true });
-          const [player1, player2] = config.players;
-
-          // destroy the ship of the other player
-          const newPlayer1 = turn === 0 ? { ...player1 } : add(player1, col as ShipType);
-          const newPlayer2 = turn === 1 ? { ...player2 } : add(player2, col as ShipType);
-
           dispatch({
             type: 'setScore',
-            score: newScore,
-            players: [newPlayer1, newPlayer2],
+            ...getNewScore({ score, col, config, turn }),
           });
         }
 
+        computerOptions.delete(index);
         target.dataset.col = JSON.stringify({ col, dirty: true });
         target.children[0].style.visibility = 'visible';
+        target.children[0].style.cursor = 'not-allowed';
       }}
     >
-      {table?.map((row, index) => {
-        const key = `${JSON.stringify(row)}_${index}`;
+      {table?.map((row, rowIndex) => {
+        const key = `${JSON.stringify(row)}_${rowIndex}`;
 
         return (
           <section className="row" key={key}>
-            {row.map((col, index) => (
+            {row.map((col, colIndex) => (
               <section
-                key={key + index}
+                key={key + colIndex}
                 className="col"
-                data-col={JSON.stringify({ col, dirty: false })}
+                data-col={JSON.stringify({ col, dirty: false, index: `${rowIndex};${colIndex}` })}
               >
                 <img
                   src={col ? '/assets/HitSmall.png' : '/assets/MissSmall.png'}
@@ -74,6 +67,7 @@ const TableGame = () => {
           </section>
         );
       })}
+      {showOverflay ? <Overlay /> : null}
     </section>
   );
 };

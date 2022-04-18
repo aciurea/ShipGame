@@ -22,7 +22,7 @@ export const initRandomApi = (length: number) => {
     }, [] as string[]);
 
     if (rowKeys.length === 0) throw new Error('No space available');
-    const randomRow = Math.floor(Math.random() * rowKeys.length);
+    const randomRow = getRandomNum(rowKeys.length);
     const row = rowKeys[randomRow];
 
     const emptyPositions = getAllEmptyPositions(arr[+row]);
@@ -35,3 +35,5 @@ export const initRandomApi = (length: number) => {
 
   return generateRandomPosition;
 };
+
+export const getRandomNum = (length: number) => Math.floor(Math.random() * length);
