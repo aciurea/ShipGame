@@ -12,3 +12,20 @@ export interface ScoreTable {
   size: number;
   positions: Array<[number, number]>;
 }
+
+export type Player = {
+  name: string;
+  records: Record<ShipType, number>;
+};
+
+export type NewScoreProps = {
+  score: Record<ShipType, ScoreTable>;
+  col: string;
+  config: Configuration;
+  turn: number;
+};
+
+export type Configuration = {
+  isComputer: boolean;
+  players: [Player, Player];
+};

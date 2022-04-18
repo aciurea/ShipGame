@@ -1,5 +1,5 @@
-import { ScoreTable, ShipType, Table } from '../types/play';
-import { initRandomApi } from './tests/random';
+import { NewScoreProps, Player, ScoreTable, ShipType, Table } from '../types/play';
+import { getRandomNum, initRandomApi } from './tests/random';
 
 export const generateArray = (size: number): Array<Array<null | string>> => {
   const newArr = [];
@@ -59,4 +59,67 @@ export const isGameOver = (scoreTable: Record<ShipType, ScoreTable>): boolean =>
 
     return size === count;
   });
+};
+
+export const add = (player: Player, col: ShipType): Player => {
+  return {
+    name: player.name,
+    records: {
+      ...player.records,
+      [col as ShipType]: player.records[col as ShipType] + 1,
+    },
+  };
+};
+
+export const getCount = (records: Record<ShipType, number>): number =>
+  Object.keys(records).reduce((acc, record) => (acc += records[record as ShipType]), 0);
+
+export const getWinner = (player1: Player, player2: Player): string => {
+  const p1Count = getCount(player1.records);
+  const p2Count = getCount(player2.records);
+
+  return p1Count === p2Count ? 'No one ' : p1Count > p2Count ? player2.name : player1.name;
+};
+
+export const getAllIndexes = (table: Table): Set<string> => {
+  const set = new Set<string>();
+  for (let i = 0; i < table.length; i++) {
+    for (let j = 0; j < table[i].length; j++) set.add(`${i};${j}`);
+  }
+
+  return set;
+};
+
+export const getValue = (data: string): { col: string; dirty: boolean; index: string } => {
+  if (!data) return { col: '', dirty: true, index: '' };
+
+  return JSON.parse(data);
+};
+
+export const chooseValueByComputer = (table: HTMLElement, options: Set<string>) => {
+  const values = Array.from(options);
+  const randomNum = getRandomNum(options.size);
+  const [row, col] = values[randomNum].split(';');
+  const element = table.children[+row]?.children[+col] as HTMLElement;
+
+  element?.click();
+};
+
+export const getNewScore = ({ score, col, config, turn }: NewScoreProps) => {
+  const [player1, player2] = config.players;
+  const ship = score[col as ShipType];
+  const newScore = {
+    ...score,
+    [col]: {
+      ...ship,
+      count: ship.count + 1,
+    },
+  };
+
+  // destroy the ship of the other player
+  const newPlayer1 = turn === 0 ? { ...player1 } : add(player1, col as ShipType);
+  const newPlayer2 = turn === 1 ? { ...player2 } : add(player2, col as ShipType);
+  const players: [Player, Player] = [newPlayer1, newPlayer2];
+
+  return { score: newScore, players };
 };

@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { populateTable } from '../../providers/play';
-import { GameStore, useGame, useGameDispatch } from './game-context';
-import Header from './Header';
+import { GameStore, useGame } from './game-context';
+import { GameConfiguration } from './GameConfiguration';
+import { Popup } from './Popup';
 import Container from './styled';
 import TableGame from './TableGame';
 import TableScore from './TableScore';
@@ -15,22 +14,24 @@ const GameReact = () => {
 };
 
 const Game = () => {
-  const dispatch = useGameDispatch();
-  const { table } = useGame();
-
-  React.useEffect(() => {
-    const { board, scoreTable } = populateTable(10);
-
-    dispatch({ type: 'startNew', state: { table: board, score: scoreTable, isOver: false } });
-  }, [dispatch]);
+  const { table, config, isOver, turn } = useGame();
 
   return (
     <Container style={{ width: '100%', height: '100%' }} size={table.length}>
-      <Header />
-      <section className="game">
-        <TableScore />
-        <TableGame />
-      </section>
+      {isOver ? (
+        <Popup />
+      ) : config ? (
+        <>
+          <h2>Turn is: {config.players[turn].name}</h2>
+          <section className="game">
+            <TableScore player={config.players[0]} />
+            <TableGame />
+            <TableScore player={config.players[1]} />
+          </section>
+        </>
+      ) : (
+        <GameConfiguration />
+      )}
     </Container>
   );
 };

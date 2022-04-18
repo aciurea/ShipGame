@@ -1,4 +1,5 @@
-import { ShipType } from '../../types/play';
+import { getCount } from '../../providers/play';
+import { Player, ShipType } from '../../types/play';
 import { useGame } from './game-context';
 
 const base = '/assets/';
@@ -10,14 +11,19 @@ const Images = {
   [ShipType.Submarine]: `${base}submarineShape.png`,
 };
 
-const TableScore = () => {
+const TableScore = ({ player }: { player: Player }) => {
   const { score } = useGame();
   if (!score) return null;
 
   return (
     <section className="table">
-      {Object.keys(score).map((shipType: any) => {
+      <label style={{ padding: 20 }}>
+        {player.name}'s lost armada: {getCount(player.records)}
+      </label>
+
+      {Object.keys(player.records).map((shipType: any) => {
         const { count, size } = score[shipType as ShipType];
+        const shipCount = player.records[shipType as ShipType];
 
         return (
           <section key={shipType} style={{ padding: '5px 0' }}>
@@ -31,7 +37,7 @@ const TableScore = () => {
                 opacity: count === size ? 0.5 : 1,
               }}
             />
-            {getScore(count, size)}
+            {getScore(shipCount)}
           </section>
         );
       })}
@@ -39,7 +45,7 @@ const TableScore = () => {
   );
 };
 
-const getScore = (count: number, size: number) => {
+const getScore = (count: number) => {
   const score = [];
   while (count > 0) {
     score.push(
