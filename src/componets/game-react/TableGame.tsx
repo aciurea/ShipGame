@@ -30,7 +30,7 @@ const TableGame = () => {
             if (tableRef.current) chooseValueByComputer(tableRef.current, computerOptions);
             setShowOverlay(false);
             clearTimeout(timeoutId);
-          }, 2000);
+          }, 1000);
         }
 
         if (col !== null) {

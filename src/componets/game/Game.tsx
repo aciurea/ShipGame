@@ -6,7 +6,9 @@ import { TableGame } from './TableGame';
 import { TableScore } from './TableScore';
 
 export const GameComponent = () => {
-  const [{ board, scoreTable }, setTable] = React.useState(populateTable(10));
+  const [{ board, scoreTable }, setTable] = React.useState(
+    populateTable({ size: 10, Battleship: 5, Carrier: 5, Cruiser: 3, Destroyer: 9, Submarine: 20 })
+  );
   const [isOver, setIsOver] = React.useState(false);
 
   const updateScore = (shipType: ShipType) => {

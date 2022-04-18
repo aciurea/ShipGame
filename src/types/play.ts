@@ -26,6 +26,8 @@ export type NewScoreProps = {
 };
 
 export type Configuration = {
+  ships: Record<ShipType, string>;
   isComputer: boolean;
+  tableSize: number;
   players: [Player, Player];
 };
