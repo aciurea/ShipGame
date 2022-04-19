@@ -100,7 +100,7 @@ export const getValue = (data: string): { col: string; dirty: boolean; index: st
 export const chooseValueByComputer = (table: HTMLElement, options: Set<string>) => {
   const values = Array.from(options);
   const randomNum = getRandomNum(options.size);
-  const [row, col] = values[randomNum].split(';');
+  const [row, col] = values[randomNum]?.split(';') ?? [-1, -1];
   const element = table.children[+row]?.children[+col] as HTMLElement;
 
   element?.click();

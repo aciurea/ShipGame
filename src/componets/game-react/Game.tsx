@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { GameStore, useGame } from './game-context';
 import { GameConfiguration } from './GameConfiguration';
 import { Popup } from './Popup';
@@ -15,12 +16,15 @@ const GameReact = () => {
 
 const Game = () => {
   const { table, config, isOver, turn } = useGame();
+  const [popup, setPopup] = useState<any>();
 
+  useEffect(() => {
+    setPopup(isOver ? <Popup /> : null);
+  }, [isOver]);
   return (
     <Container style={{ width: '100%', height: '100%' }} size={table.length}>
-      {isOver ? (
-        <Popup />
-      ) : config ? (
+      {popup}
+      {config ? (
         <>
           <h2>Turn is: {config.players[turn].name}</h2>
           <section className="game">

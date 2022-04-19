@@ -15,9 +15,12 @@ const Container = styled.section`
 
   .popup {
     position: fixed;
-    width: 100%;
-    height: 100%;
-    padding: 50px;
+    height: 150px;
+    z-index: 2;
+    background-color: white;
+    opacity: 0.9;
+
+    filter: drop-shadow(0 0 7px rgba(12, 41, 48, 0.2));
 
     display: flex;
     flex-direction: column;
