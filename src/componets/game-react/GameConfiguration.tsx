@@ -120,6 +120,7 @@ export const GameConfiguration = () => {
           min={0}
           label={ShipType.Battleship}
           name={ShipType.Battleship}
+          defaultValue="0"
           onChange={() => {
             setMax(({ max }) => ({
               max,
@@ -133,6 +134,7 @@ export const GameConfiguration = () => {
           min={0}
           label={ShipType.Carrier}
           name={ShipType.Carrier}
+          defaultValue="0"
           onChange={() => {
             setMax(({ max }) => ({
               max,
@@ -146,6 +148,7 @@ export const GameConfiguration = () => {
           min={0}
           label={ShipType.Cruiser}
           name={ShipType.Cruiser}
+          defaultValue="0"
           onChange={() => {
             setMax(({ max }) => ({
               max,
@@ -157,6 +160,7 @@ export const GameConfiguration = () => {
         <Item
           type="number"
           min={0}
+          defaultValue="0"
           label={ShipType.Destroyer}
           name={ShipType.Destroyer}
           onChange={() => {
@@ -172,6 +176,7 @@ export const GameConfiguration = () => {
           min={0}
           label={ShipType.Submarine}
           name={ShipType.Submarine}
+          defaultValue="0"
           onChange={() => {
             setMax(({ max }) => ({
               max,
