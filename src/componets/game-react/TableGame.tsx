@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { chooseValueByComputer, getAllIndexes, getNewScore, getValue } from '../../providers/play';
+import { ScoreTable, ShipType } from '../../types/play';
 import { useGame, useGameDispatch } from './game-context';
 import { Overlay } from './Overlay';
 
@@ -34,16 +35,20 @@ const TableGame = () => {
         }
 
         if (col !== null) {
+          const newScore = getNewScore({ score, col, config, turn });
           dispatch({
             type: 'setScore',
-            ...getNewScore({ score, col, config, turn }),
+            ...newScore,
           });
+
+          const ship = newScore.score[col as ShipType];
+          revealCellsWhenShipIsSank(index, ship, target);
         }
 
         computerOptions.delete(index);
         target.dataset.col = JSON.stringify({ col, dirty: true });
-        target.children[0].style.visibility = 'visible';
         target.children[0].style.cursor = 'not-allowed';
+        showCell(target);
       }}
     >
       {table?.map((row, rowIndex) => {
@@ -73,3 +78,27 @@ const TableGame = () => {
 };
 
 export default TableGame;
+
+function revealCellsWhenShipIsSank(index: string, ship: ScoreTable, target: any) {
+  if (index && ship.count === ship.size) {
+    const [rowIndex, colIndex] = index.split(';');
+
+    const parent = target.parentElement;
+    const leftSibling = parent.children[+colIndex - 1];
+    const rightSibling = parent.children[+colIndex + 1];
+
+    if (leftSibling) showCell(leftSibling);
+    if (rightSibling) showCell(rightSibling);
+
+    const grandParent = parent.parentElement;
+    const upperSibling = grandParent.children[+rowIndex - 1]?.children[+colIndex];
+    const downSibling = grandParent.children[+rowIndex + 1]?.children[+colIndex];
+
+    if (upperSibling) showCell(upperSibling);
+    if (downSibling) showCell(downSibling);
+  }
+}
+
+function showCell(element: HTMLElement) {
+  (element.children[0] as HTMLElement).style.visibility = 'visible';
+}
