@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { chooseValueByComputer, getAllIndexes, getNewScore, getValue } from '../../providers/play';
-import { ScoreTable, ShipType } from '../../types/play';
+import { ScoreTable } from '../../types/play';
 import { useGame, useGameDispatch } from './game-context';
 import { Overlay } from './Overlay';
 
@@ -40,9 +40,6 @@ const TableGame = () => {
             type: 'setScore',
             ...newScore,
           });
-
-          const ship = newScore.score[col as ShipType];
-          revealCellsWhenShipIsSank(index, ship, target);
         }
 
         computerOptions.delete(index);
